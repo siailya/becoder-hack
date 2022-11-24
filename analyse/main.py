@@ -160,6 +160,18 @@ def process_person_file(author_in, file_in, in_data, broken_count=0):
     plot_data(total_file, broken_file, work_file, f"{author_in} - {file_in.split('/')[-1]}", broken_count)
 
 
+def get_most_edit_person_for_file(data, file):
+    authors = {}
+
+    for f in data:
+        if f['file'] == file:
+            if f['author'] not in authors:
+                authors[f['author']] = 0
+            authors[f['author']] += 1
+
+    return max(authors, key=authors.get)
+
+
 if __name__ == '__main__':
     with open(url, 'r') as read_file:
         main_data = json.load(read_file)
