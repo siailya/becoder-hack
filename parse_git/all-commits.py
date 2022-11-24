@@ -5,24 +5,25 @@ from git import Repo
 
 from utils import is_fix_commit
 
-NAME = "angular"
+NAME = "knockout"
+GIT_URL = "https://github.com/knockout/knockout"
+BRANCH = "master"
 COMMITS_LIMIT = 5000
 
 try:
-    Repo.clone_from("https://github.com/angular/angular", f"input/{NAME}")
+    Repo.clone_from(GIT_URL, f"input/{NAME}")
     print("Cloned")
 except:
     print("Already cloned")
 
 analyse_repo = Repo(f"input/{NAME}")
 analyse_data = []
-commits_count = len(list(analyse_repo.iter_commits("main"))[:COMMITS_LIMIT])
+commits_count = len(list(analyse_repo.iter_commits(BRANCH))[:COMMITS_LIMIT])
 changed_files = set()
 start_time = datetime.now()
 
-
 print(f"Start analyse {NAME}\nTotal commits:", commits_count)
-for index, commit in enumerate(list(analyse_repo.iter_commits("main"))[:COMMITS_LIMIT][::-1]):
+for index, commit in enumerate(list(analyse_repo.iter_commits(BRANCH))[:COMMITS_LIMIT][::-1]):
     if commit.message.startswith("Merge"):
         continue
 
@@ -44,7 +45,7 @@ for index, commit in enumerate(list(analyse_repo.iter_commits("main"))[:COMMITS_
             "file": file,
             "author": commit.author.name,
             "msg": commit.message,
-            "date": commit.committed_datetime.isoformat(),
+            "date": int(commit.committed_datetime.timestamp()),
             "is_broken": False,
         })
 
