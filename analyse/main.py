@@ -1,6 +1,8 @@
 import datetime
 import json
 
+import matplotlib.pyplot as plt
+
 url = "analyse_data_angular.json"
 
 
@@ -54,6 +56,13 @@ def sort_author_files_time_group(dic, author, file):
                     if f == file:
                         dic_author_file[date] += dic[date][author][f]
 
+    # Remove empty dates at start and end
+    while list(dic_author_file.values())[0] == 0:
+        del dic_author_file[list(dic_author_file.keys())[0]]
+
+    while list(dic_author_file.values())[-1] == 0:
+        del dic_author_file[list(dic_author_file.keys())[-1]]
+
     return dic_author_file
 
 
@@ -104,7 +113,7 @@ def get_authors_files_broken(data):
 
     for file in data:
         if file['is_broken']:
-            af = file['author'] + "_" + file['file']
+            af = file['author'] + "\n" + file['file']
             if af not in res:
                 res[af] = 0
             res[af] += 1
@@ -125,43 +134,41 @@ def get_author_file_broke_dates(author, file):
     return res
 
 
+def plot_data(total, broken, work, title, broken_count):
+    fig, ax = plt.subplots()
+
+    ax.plot(total.keys(), total.values(), alpha=0.4, color='g', label="Total")
+    ax.plot(broken.keys(), broken.values(), alpha=0.4, color='r', label="Broken")
+    ax.plot(work.keys(), work.values(), alpha=0.4, color='b', label="Not broken")
+
+    ax.legend()
+    ax.set_xlabel("Date")
+    ax.set_ylabel("File changes count")
+    ax.set_title(title)
+    ax.set_xticks(list(total.keys()), labels=list(total.keys()), rotation=70, fontsize=4.5)
+
+    plt.savefig(f'out_plots/{title.lower().replace(" ", "")}{broken_count}.png', dpi=250)
+
+
+def process_person_file(author_in, file_in, in_data, broken_count=0):
+    total_dict, broken_dict, not_broken_dict = parse_data(in_data, return_tuple=True)
+
+    broken_file = sort_author_files_time_group(broken_dict, author_in, file_in)
+    work_file = sort_author_files_time_group(not_broken_dict, author_in, file_in)
+    total_file = sort_author_files_time_group(total_dict, author_in, file_in)
+
+    plot_data(total_file, broken_file, work_file, f"{author_in} - {file_in.split('/')[-1]}", broken_count)
+
+
 if __name__ == '__main__':
     with open(url, 'r') as read_file:
         main_data = json.load(read_file)
 
-    total_dic, broken_dict, not_broken_dict = parse_data(main_data, return_tuple=True)
+    broken_authors = get_authors_files_broken(main_data)
+    broken_authors = {k: v for k, v in sorted(broken_authors.items(), key=lambda item: item[1], reverse=True)}
 
-    broken_file = sort_author_files_time_group(broken_dict, "Alex Rickabaugh",
-                                               "packages/compiler-cli/test/ngtsc/ngtsc_spec.ts")
-    work_file = sort_author_files_time_group(not_broken_dict, "Alex Rickabaugh",
-                                             "packages/compiler-cli/test/ngtsc/ngtsc_spec.ts")
-    total_file = sort_author_files_time_group(total_dic, "Alex Rickabaugh",
-                                              "packages/compiler-cli/test/ngtsc/ngtsc_spec.ts")
-    print(total_file)
-    import matplotlib.pyplot as plt
+    for a in list(broken_authors.keys())[:10]:
+        author, file = a.split("\n")
+        print(f"Processing {author} - {file}: {broken_authors[a]}")
 
-    fig = plt.figure()
-    ax = fig.add_axes([0, 0, 1, 1])
-    langs = total_file.keys()
-    students = total_file.values()
-    ax.bar(langs, students)
-    plt.show()
-
-    # # print(parse_date(url))
-    #
-    # broken_files = get_files_broken()
-    # # sort by value
-    # broken_files = {k: v for k, v in sorted(broken_files.items(), key=lambda item: item[1], reverse=True)}
-    # # print(broken_files)
-    # broken_authors = get_authors_broken()
-    # # sort by value
-    # broken_authors = {k: v for k, v in sorted(broken_authors.items(), key=lambda item: item[1], reverse=True)}
-    # # print(broken_authors)
-    #
-    # broken_authors_files = get_authors_files_broken()
-    # # sort by value
-    # broken_authors_files = {k: v for k, v in
-    #                         sorted(broken_authors_files.items(), key=lambda item: item[1], reverse=True)}
-    #
-    # for i in list(broken_authors_files.keys())[0:10]:
-    #     print(broken_authors_files[i], i)
+        process_person_file(author, file, main_data, broken_authors[a])
