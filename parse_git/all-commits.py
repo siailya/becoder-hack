@@ -5,18 +5,24 @@ from git import Repo
 
 from utils import is_fix_commit
 
-try:
-    Repo.clone_from("https://github.com/knockout/knockout", "input/knockout")
-except:
-    pass
+NAME = "angular"
+COMMITS_LIMIT = 5000
 
-analyse_repo = Repo("input/knockout")
+try:
+    Repo.clone_from("https://github.com/angular/angular", f"input/{NAME}")
+    print("Cloned")
+except:
+    print("Already cloned")
+
+analyse_repo = Repo(f"input/{NAME}")
 analyse_data = []
-commits_count = len(list(analyse_repo.iter_commits("master")))
+commits_count = len(list(analyse_repo.iter_commits("main"))[:COMMITS_LIMIT])
 changed_files = set()
 start_time = datetime.now()
 
-for index, commit in enumerate(list(analyse_repo.iter_commits("master"))[::-1]):
+
+print(f"Start analyse {NAME}\nTotal commits:", commits_count)
+for index, commit in enumerate(list(analyse_repo.iter_commits("main"))[:COMMITS_LIMIT:-1]):
     if commit.message.startswith("Merge"):
         continue
 
@@ -25,6 +31,7 @@ for index, commit in enumerate(list(analyse_repo.iter_commits("master"))[::-1]):
               f"Elapsed time: {datetime.now() - start_time}\n"
               f"For one commit: {(datetime.now() - start_time) / (index + 1)}\n"
               f"Estimated time: {(datetime.now() - start_time) / (index + 1) * (commits_count - index)}\n")
+        json.dump(analyse_data, open(f"output/analyse_data_{NAME}.json", "w"), indent=4)
 
     for file in commit.stats.files:
         if is_fix_commit(commit):
@@ -41,7 +48,7 @@ for index, commit in enumerate(list(analyse_repo.iter_commits("master"))[::-1]):
             "is_broken": False,
         })
 
-json.dump(analyse_data, open("output/analyse_data_all.json", "w"), indent=4)
+json.dump(analyse_data, open(f"output/analyse_data_{NAME}.json", "w"), indent=4)
 
 print(
     f"Ready! Elapsed time: {datetime.now() - start_time}\n"
