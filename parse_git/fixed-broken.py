@@ -52,7 +52,7 @@ for index, commit in enumerate(list(analyse_repo.iter_commits("master"))):
                 "broken_date": None,
             })
 
-json.dump(analyse_data, open("output/analyse_data.json", "w"))
+json.dump(analyse_data, open("output/analyse_data.json", "w"), indent=4)
 print(
     f"Ready! Elapsed time: {datetime.now() - start_time}\n"
     f"For one commit: {(datetime.now() - start_time) / commits_count}\n"
