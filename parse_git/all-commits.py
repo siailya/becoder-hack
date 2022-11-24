@@ -22,7 +22,7 @@ start_time = datetime.now()
 
 
 print(f"Start analyse {NAME}\nTotal commits:", commits_count)
-for index, commit in enumerate(list(analyse_repo.iter_commits("main"))[:COMMITS_LIMIT:-1]):
+for index, commit in enumerate(list(analyse_repo.iter_commits("main"))[:COMMITS_LIMIT][::-1]):
     if commit.message.startswith("Merge"):
         continue
 
