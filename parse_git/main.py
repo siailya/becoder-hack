@@ -6,11 +6,11 @@ from git import Repo
 from utils import is_fix_commit
 
 try:
-    Repo.clone_from("https://github.com/knockout/knockout", "knockout")
+    Repo.clone_from("https://github.com/knockout/knockout", "input/knockout")
 except:
     pass
 
-analyse_repo = Repo("knockout")
+analyse_repo = Repo("input/knockout")
 analyse_data = []
 commits_count = len(list(analyse_repo.iter_commits("master")))
 pending_files = set()
@@ -52,4 +52,8 @@ for index, commit in enumerate(list(analyse_repo.iter_commits("master"))):
                 "broken_date": None,
             })
 
-    json.dump(analyse_data, open("analyse_data.json", "w"))
+json.dump(analyse_data, open("output/analyse_data.json", "w"))
+print(
+    f"Ready! Elapsed time: {datetime.now() - start_time}\n"
+    f"For one commit: {(datetime.now() - start_time) / commits_count}\n"
+)
