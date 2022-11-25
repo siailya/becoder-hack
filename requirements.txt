@@ -4,3 +4,4 @@ scikit-learn
 ipywidgets
 pandas
 flask
+flask-cors

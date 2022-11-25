@@ -290,3 +290,4 @@ parse_git/output
 
 node_modules
 .vscode
+flask/static
