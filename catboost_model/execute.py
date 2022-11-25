@@ -10,6 +10,7 @@ def load_model():
     global model
 
     print("Loading model...")
+
     time_start = time.time()
     model = CatBoostClassifier()
     model.load_model("bccommit")
