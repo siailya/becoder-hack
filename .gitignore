@@ -287,3 +287,6 @@ poetry.toml
 analyse_data.json
 parse_git/input
 parse_git/output
+
+node_modules
+.vscode
