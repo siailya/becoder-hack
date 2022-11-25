@@ -23,7 +23,7 @@ COPY catboost_model catboost_model
 
 COPY server.py ./
 COPY static static
-COPY --from=bulder /app/dist /static
+COPY --from=bulder /app/dist/. static/
 
 EXPOSE 5000
 
