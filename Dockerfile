@@ -26,4 +26,6 @@ COPY --from=bulder /app/dist /flask/static
 
 EXPOSE 5000
 
-CMD [ "cd flask && python", "flask/hello.py" ]
+WORKDIR /app/flask
+
+CMD [ "python", "hello.py" ]
