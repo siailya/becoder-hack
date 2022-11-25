@@ -1,6 +1,22 @@
 <template>
   <n-config-provider :theme="darkTheme">
     <n-card>
+        <div style="text-align: center">
+            <h1 style="margin: 0">Проект "Тарантино"</h1>
+            <h3 style="font-style: italic; font-weight: 300; margin: 0">by "Криминальное тестирование"</h3>
+        </div>
+    </n-card>
+
+    <n-card style="margin-top: 12px;">
+        <h3 style="text-align: center; font-weight: 300; margin-top: 0">Анализируемый репозиторий:</h3>
+
+        <n-input
+            value="https://github.com/angular/angular"
+            disabled
+        />
+    </n-card>
+
+    <n-card style="margin-top: 12px;">
       <n-space vertical>
         <n-select
             :options="authors_options"
@@ -80,7 +96,7 @@ const onClickSubmit = () => {
         person.value = res.data.person
       })
       .catch((err) => {
-        error.value = err.response.data
+        error.value = err?.response?.data || "Всё плохо, произошла ошибка..."
         result.value = ""
       })
 }
