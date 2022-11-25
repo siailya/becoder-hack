@@ -23,8 +23,8 @@ COPY catboost_model catboost_model
 
 COPY server.py ./
 COPY static static
-COPY --from=bulder /app/dist /flask/static
+COPY --from=bulder /app/dist /static
 
 EXPOSE 5000
 
-CMD [ "python", "hello.py" ]
+CMD [ "python", "server.py" ]
