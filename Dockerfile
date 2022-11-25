@@ -21,11 +21,10 @@ RUN pip install -r requirements.txt
 COPY analyse analyse
 COPY catboost_model catboost_model
 
-COPY flask flask
+COPY server.py ./
+COPY static static
 COPY --from=bulder /app/dist /flask/static
 
 EXPOSE 5000
-
-WORKDIR /app/flask
 
 CMD [ "python", "hello.py" ]

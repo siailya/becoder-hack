@@ -8,10 +8,10 @@ from analyse.main import get_most_edit_person_for_file
 from catboost_model.execute import load_model, model_predict
 
 model = load_model(
-    model_path='../catboost_model/bccommit'
+    model_path='catboost_model/bccommit'
 )
 
-with open("../analyse/analyse_data_angular.json", 'r') as read_file:
+with open("analyse/analyse_data_angular.json", 'r') as read_file:
     main_data = json.load(read_file)
 
 # create app and set static files folder and index.html
