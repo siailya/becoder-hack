@@ -1,7 +1,7 @@
 import json
 
 import pandas as pd
-from flask import Flask, request, jsonify, Response
+from flask import Flask, request, jsonify, Response, send_from_directory
 from flask_cors import CORS
 
 from analyse.main import get_most_edit_person_for_file
@@ -14,8 +14,16 @@ model = load_model(
 with open("../analyse/analyse_data_angular.json", 'r') as read_file:
     main_data = json.load(read_file)
 
-app = Flask(__name__)
+# create app and set static files folder and index.html
+app = Flask(__name__,
+            static_folder="static",
+            static_url_path="/")
 CORS(app)
+
+
+@app.route("/")
+def index():
+    return send_from_directory(app.static_folder, "index.html")
 
 
 @app.post("/api/predict")

@@ -18,12 +18,12 @@ COPY requirements.txt ./
 
 RUN pip install -r requirements.txt
 
-COPY analyse ./analyse
-COPY flask ./flask
-COPY catboost_model ./catboost_model
+COPY analyse analyse
+COPY catboost_model catboost_model
 
-COPY --from=bulder /app/dist ./flask/static
+COPY flask flask
+COPY --from=bulder /app/dist /flask/static
 
 EXPOSE 5000
 
-CMD [ "python", "./flask/hello.py" ]
+CMD [ "cd flask && python", "flask/hello.py" ]
