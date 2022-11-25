@@ -22,10 +22,10 @@ if __name__ == '__main__':
     load_model()
     test = {
         "file": ["abc.js"],
-            "author": ["Ilya"],
-            "msg": ["Test commit"],
-            "date": [1669308352]
-            }
+        "author": ["Ilya"],
+        "msg": ["Test commit"],
+        "date": [1669308352]
+    }
 
     test_df = pd.DataFrame.from_dict(test)
 
