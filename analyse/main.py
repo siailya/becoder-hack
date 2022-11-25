@@ -3,8 +3,6 @@ import json
 
 import matplotlib.pyplot as plt
 
-url = "analyse_data_angular.json"
-
 
 def parse_data(data, return_tuple=False):
     dic_total = {}
@@ -173,6 +171,8 @@ def get_most_edit_person_for_file(data, file):
 
 
 if __name__ == '__main__':
+    url = "analyse_data_angular.json"
+
     with open(url, 'r') as read_file:
         main_data = json.load(read_file)
 
