@@ -73,7 +73,7 @@ const authors_options = computed(() => {
   })
 })
 
-const API = "http://localhost:5000"
+const API = "http://83.222.10.235:5000"
 
 const author = ref("Alex Rickabaugh")
 const msg = ref("update package.json file")
