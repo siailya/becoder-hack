@@ -125,3 +125,8 @@ docker run -p 5000:5000 becoder
 3. Скопировать содержимое папки `web/dist` в папку `static` в корне проекта
 4. Запустить сервер командой `python server.py`
 5. Открыть в браузере http://localhost:5000
+
+
+<div id="header" align="center">
+  <img src="https://media.giphy.com/media/Dh5q0sShxgp13DwrvG/giphy.gif" width="500"/>
+</div>
